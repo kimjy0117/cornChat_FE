@@ -72,13 +72,14 @@ export default function LoginArea(){
                 <LargeButton 
                     backgroundColor="#A3A19A"
                     fontColor="black"
+                    hoverColor="#83817d"
                     title="회원가입"
                     margin="0 0 10px 0"
-                    onClick={()=>alert("회원가입")}
+                    onClick={()=>{navigate("/signUp");}}
                 />
 
                 {/* 비밀번호 찾기 링크 */}
-                <FindPwLink onClick={()=>{navigate("/FindPw");}}>
+                <FindPwLink onClick={()=>{navigate("/findPw");}}>
                     <span>비밀번호를 잊으셨나요?</span>
                 </FindPwLink>
             </div>
