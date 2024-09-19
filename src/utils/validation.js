@@ -1,6 +1,6 @@
 //이메일 검증
 export function isEmail(value){
-    const emailPattern = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{3}$/;
+    const emailPattern = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{2,3}$/;
     return emailPattern.test(value);
 }
 
@@ -23,10 +23,21 @@ export function isMinLength(value, minLength){
 
 //문자열의 최대 길이 검증
 export function isMaxLength(value, maxLength){
-    return value && value.length <= maxLength;
+    return value.length <= maxLength;
+}
+
+//문자열이 같은지 검증
+export function isEqualLength(value, equalLength){
+    return value.length == equalLength;
 }
 
 //비밀번호 일치 검증
 export function isEqualValue(value, value2){
     return value === value2;
+}
+
+//숫자인지 검증
+export function isNum(value){
+    const numPattern = /^[0-9]+$/;
+    return numPattern.test(value);
 }
