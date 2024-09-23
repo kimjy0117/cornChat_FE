@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import EmailForm from "./EmailForm";
-import CertificationForm from "./CertificationForm";
+import { useState } from "react";
+import FindPwAreaTop from "./FindPwAreaTop";
+import ResetPwForm from "./ResetPwForm";
 
 const FindPwAreaStyle = styled.div`
     //레이아웃
@@ -32,42 +34,18 @@ const FindPwAreaStyle = styled.div`
     }
 `;
 
-const FindPwLogo = styled.div`
-    //레이아웃
-    width: 100%;
-    text-align: left;
-    margin-bottom: 15px;
-
-    //폰트
-    font-size: 30px;
-    font-weight: 600;
-    color: black;
-`;
-
-const FindPwNotice = styled(FindPwLogo)`
-    //레이아웃
-    margin: 0 0 60px 5px;
-
-    //폰트
-    font-size: 15px;
-    font-weight: 700;
-`;
-
 export default function FindPwArea(){
+    //이메일 인증 여부
+    const [isVerified, setIsVerified] = useState(false);
+
     return(
         <FindPwAreaStyle>
             <div className="findPwBoxLayout">
                 {/* 상단영역 */}
-                <FindPwLogo>
-                    <span>비밀번호를 잊으셨나요?</span>
-                </FindPwLogo>
-                <FindPwNotice>
-                    <span>본인인증을 위해 이메일 인증을 해주세요.</span>
-                </FindPwNotice>
+                <FindPwAreaTop />
 
-                {/* form영역 */}
-                <EmailForm/>
-                <CertificationForm/>
+                {/* 이메일 인증 성공 여부에 따라 다른 폼 렌더링 */}
+                {isVerified ? <ResetPwForm /> : <EmailForm onVerificationSuccess={() => setIsVerified(true)} />}
                 
             </div>
         </FindPwAreaStyle>
