@@ -5,6 +5,7 @@ import { isEmpty, isName, isMinMaxLength, isEqualLength, isMaxLength, isPw, isEq
 import EmailForm from "./EmailForm";
 import { useState } from "react";
 import { LargeButton } from "../buttons/LargeButton";
+import { useNavigate } from "react-router-dom";
 
 const ButtonLayout = styled.div`
     //레이아웃
@@ -39,6 +40,7 @@ export default function SignUpForm(){
     const [submitAttempt, setSubmitAttemt] = useState(false);
     const [isVerified, SetIsVerified] = useState(false);
     const [emailSubmitError, setEmailSubmitError] = useState({hasError: false});
+    const navigate = useNavigate();
 
     //이름
     const {
@@ -109,9 +111,13 @@ export default function SignUpForm(){
                 setIsCheckPasswordEmpty(true);
             }
             return;
+
         }
 
+        //회원가입 성공시
         alert("회원가입 성공!");
+        navigate("/signUpComplete");
+
     }
 
     return(
