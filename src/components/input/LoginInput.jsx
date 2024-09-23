@@ -1,12 +1,13 @@
 import styled from "styled-components";
+import { horizontalShaking } from "../../style/animationStyle";
 
 const InputLayout = styled.div`
     width: 100%;
-    height: 40px;
-    margin-bottom: 23px;
+    height: 100%;
+    margin-bottom: 10px;
 
     & .label-box{
-        margin-bottom: 13px;
+        margin-bottom: 10px;
     }
 
     & .label-text{
@@ -20,13 +21,16 @@ const InputLayout = styled.div`
         margin-top: 0px;
         margin-left: 12px;
     }
+`;
 
-    & .error-message{
-        margin: 0;
-        font-size: 12px;
-        font-weight: 700;
-        color: #f31d1d;
-    }
+// 에러 메시지 스타일
+const ErrorMessage = styled.p`
+    margin: 2px 0 0 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #f31d1d;
+    /* 에러 발생 시 애니메이션 적용 */
+    animation: ${(props) => (props.shake ? horizontalShaking : 'none')} 0.2s ease;
 `;
 
 const StyledInput = styled.input`
@@ -38,7 +42,7 @@ const StyledInput = styled.input`
     //스타일
     background-color: rgba(0, 0, 0, 0.3);
     border-width: 2px;
-    border-color: #FCDF47;
+    border-color: ${(props) => props.borderColor || '#FCDF47'};
     border-radius: 7px;
 
     //폰트
@@ -52,7 +56,7 @@ const StyledInput = styled.input`
     }
 `;
 
-export default function LoginInput({ text, id, error, ...props }){
+export default function LoginInput({ text, id, error, shake, ...props }){
     return(
         <InputLayout>
             {/* label영역 */}
@@ -70,7 +74,9 @@ export default function LoginInput({ text, id, error, ...props }){
 
             {/* error메시지 */}
             <div className="error-box">
-                {/* <p className="error-message">{error&&error}</p> */}
+                <ErrorMessage shake={shake}>
+                    {error && error}
+                </ErrorMessage>
             </div>
         </InputLayout>
     );
