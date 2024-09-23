@@ -11,6 +11,24 @@ const ButtonLayout = styled.div`
     width: 70%;
 `;
 
+const VerifiedMessage = styled.p`
+    //레이아웃
+    margin: 0;
+
+    //스타일
+    font-size: 12px;
+    font-weight: 700;
+    color: #32bd0c;
+`;
+
+const VerifiedMessageBox = styled.div`
+    //레이아웃
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin: 0 0 0 12px;
+`;
+
 export default function SignUpForm(){
     const [isNameEmpty, setIsNameEmpty] = useState(false);
     const [isPhoneEmpty, setIsPhoneEmpty] = useState(false);
@@ -117,6 +135,12 @@ export default function SignUpForm(){
             <EmailForm onVerificationSuccess={() => { SetIsVerified(true)}}
                         triggerEmailSubmitError={emailSubmitError}
             />
+            {/* 인증 완료시 문구 출력 */}
+            <VerifiedMessageBox>
+                <VerifiedMessage>
+                    {isVerified && "※이메일 인증이 완료되었습니다."}
+                </VerifiedMessage>
+            </VerifiedMessageBox>
 
             <Input
                 type="text"
