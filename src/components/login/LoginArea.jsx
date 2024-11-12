@@ -70,9 +70,9 @@ export default function LoginArea(){
 
                 {/* 버튼 영역 */}
                 <LargeButton 
-                    backgroundColor="#A3A19A"
+                    backgroundColor="#83817d"
                     fontColor="black"
-                    hoverColor="#83817d"
+                    hoverColor="#A3A19A"
                     title="회원가입"
                     margin="0 0 10px 0"
                     onClick={()=>{navigate("/signUp");}}
