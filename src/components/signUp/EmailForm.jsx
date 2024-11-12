@@ -4,11 +4,13 @@ import { useInput } from "../../hooks/useInput";
 import { FormLayout, TitleLayout } from "../../style/formLayout";
 import {SmallButton} from "../buttons/SmallButton";
 import { isEmail, isEmpty, isMaxLength, isEqualLength } from "../../utils/validation";
+import axiosInstance from "../../api/axiosInstance";
+
 
 //인증번호 더미데이터
 const certificationNum = "000000";
 
-export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitError }){
+export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitError, onValueChange }){
     const [isShake, setIsShake] = useState(false);
     const [isSubmit, setIsSubmit] = useState(false);
     const [isEmailEmpty, setIsEmailEmpty] = useState(false);
@@ -24,9 +26,51 @@ export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitErr
         value: emailValue,
         hasError: emailHasError,
         inputHandler: emailInputHandler,
-     } = useInput('', (value) => isEmpty(value) || isEmail(value));
+        } = useInput('', (value) => isEmpty(value) || isEmail(value));
 
-     const sendCertificationNum = (e) => {
+
+
+    //이메일 인증번호 생성 api호출
+    const joinEmailCodeSubmit = async () => {
+        const requestData = {
+            email: emailValue
+        };
+
+        try {
+          const response = await axiosInstance.post('/email/authcode/join', requestData);
+          console.log(response.data);
+          alert("api 요청 성공");
+        } catch (error) {
+          console.error('API 요청 오류:', error);
+          alert(error.response.data.message);
+        }
+      };
+
+    //이메일 인증번호 검증 api호출
+    const verifyEmailCodeSubmit = async () => {
+        const requestData = {
+            email: emailValue,
+            code: certificationValue
+        };
+
+        try{
+            const response = await axiosInstance.post('/email/authcode', requestData);
+            console.log(response.data);
+            alert("인증 성공");
+            
+            //인증 여부 성공으로 변경
+            setIsCertificationSuccess(true);
+
+            // 인증 성공 시 상위 컴포넌트에서 전달된 콜백 호출
+            onVerificationSuccess(); 
+        } catch (error) {
+            console.error('API 요청 오류:', error);
+            alert(error.response.data.message);
+            setCertificationHasError(true);
+        }
+    };
+
+    const sendCertificationNum = (e) => {
         //이메일 전송 시 형식이 안맞으면 전송을 막고 에러를 띄움
         if (emailHasError || isEmpty(emailValue)){
             e.preventDefault();
@@ -38,6 +82,8 @@ export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitErr
         }
         //submit을 하면 isSubmit을 true로 변경
         else{
+            //인증코드 전송요청
+            joinEmailCodeSubmit();
             alert('이메일 전송');
             setIsSubmit(true);
             setEmailSubmitError(false);
@@ -82,22 +128,8 @@ export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitErr
             //서버로 값 전송
             else{
                 setCertificationHasError(false);
-                alert("인증번호 검증");
-            
-                //인증 성공
-                if(certificationValue == certificationNum){
-                    alert("인증성공!");
-
-                    //인증 성공여부
-                    setIsCertificationSuccess(true);
-
-                    // 인증 성공 시 상위 컴포넌트에서 전달된 콜백 호출
-                    onVerificationSuccess(); 
-                }
-                //인증 실패
-                else{
-                    setCertificationHasError(true);
-                }
+                //인증번호 검증 api 호출
+                verifyEmailCodeSubmit(); 
             }
         }
     }
@@ -132,6 +164,7 @@ export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitErr
                     onChange = {(e) => {
                         emailInputHandler(e);
                         submitChangeHandler(e);
+                        onValueChange(e.target.value);
                     }}
                     error={emailSubmitError ? '※이메일 인증을 해주세요.' : emailHasError || isEmailEmpty ? '※이메일을 정확히 입력해주세요.' : null }
                     shake={emailSubmitError || isEmailEmpty || isShake}

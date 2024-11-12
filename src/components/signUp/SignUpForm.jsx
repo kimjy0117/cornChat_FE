@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import Input from "../input/Input";
 import { useInput } from "../../hooks/useInput";
-import { isEmpty, isName, isMinMaxLength, isEqualLength, isMaxLength, isPw, isEqualValue } from "../../utils/validation";
+import { isEmpty, isName, isMinMaxLength, isEqualLength, isMaxLength, isPw, isUserId, isEqualValue } from "../../utils/validation";
 import EmailForm from "./EmailForm";
 import { useState } from "react";
 import { LargeButton } from "../buttons/LargeButton";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../api/axiosInstance";
 
 const ButtonLayout = styled.div`
     //레이아웃
@@ -33,12 +34,14 @@ const VerifiedMessageBox = styled.div`
 export default function SignUpForm(){
     const [isNameEmpty, setIsNameEmpty] = useState(false);
     const [isPhoneEmpty, setIsPhoneEmpty] = useState(false);
+    const [isUserIdEmpty, setIsUserIdEmpty] = useState(false);
     const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
     const [isCheckPasswordEmpty, setIsCheckPasswordEmpty] = useState(false);
     const [phone, setPhone] = useState('');
     const [phoneHasError, setPhoneHasError] = useState(false);
     const [submitAttempt, setSubmitAttemt] = useState(false);
-    const [isVerified, SetIsVerified] = useState(false);
+    const [isVerified, setIsVerified] = useState(false);
+    const [email, setEmail] = useState('');
     const [emailSubmitError, setEmailSubmitError] = useState({hasError: false});
     const navigate = useNavigate();
 
@@ -48,6 +51,13 @@ export default function SignUpForm(){
         hasError: nameHasError,
         inputHandler: nameInputHandler,
     } = useInput('', (value) => isEmpty(value) || isName(value));
+
+    //아이디
+    const {
+        value: userId,
+        hasError: userIdHasError,
+        inputHandler: userIdInputHandler,
+    } = useInput('', (value) => isEmpty(value) || isUserId(value));
 
     //비밀번호
     const {
@@ -62,6 +72,34 @@ export default function SignUpForm(){
         hasError: checkPasswordHasError,
         inputHandler: checkPasswordInputHandler,
     } = useInput('', (value) => isEmpty(value) || isEqualValue(value, password));
+
+
+    //회원가입 api호출
+    const joinSubmit = async () => {
+        const requestData = {
+            userName: name,
+            email: email,
+            phoneNum: phone.replace(/-/g, ""),
+            userId: userId,
+            password: password
+        };
+
+        try {
+            const response = await axiosInstance.post('/user/join', requestData);
+            console.log(response.data);
+            alert("회원가입 성공");
+            navigate("/signUpComplete");
+        } catch (error) {
+            console.error('API 요청 오류:', error);
+            alert(error.response.data.message);
+        }
+    };
+
+    //하위 컴포넌트에게 email값 받아오는 함수
+    const handleEmailValueChange = (newValue) => {
+        setEmail(newValue);
+    };
+
 
     //핸드폰번호 형태 변환
     const phoneInputHandler = (e) => {
@@ -87,9 +125,9 @@ export default function SignUpForm(){
 
     //회원가입 버튼 클릭 시 이벤트
     const handleSubmit = (e) => {
-        //이름, 이메일, 연락처, 비밀번호 에러시 submit 막음
-        if(isEmpty(name) || isEmpty(phone) || isEmpty(password) || isEmpty(checkPassword) || !isVerified
-            || nameHasError || phoneHasError || passwordHasError || checkPasswordHasError){
+        //이름, 이메일, 연락처, 아이디, 비밀번호 에러시 submit 막음
+        if(isEmpty(name) || isEmpty(phone) || isEmpty(userId) || isEmpty(password) || isEmpty(checkPassword) || !isVerified
+            || nameHasError || phoneHasError || userIdHasError || passwordHasError || checkPasswordHasError){
             e.preventDefault();
             setSubmitAttemt(true);
 
@@ -104,6 +142,9 @@ export default function SignUpForm(){
             if(isEmpty(phone)){
                 setIsPhoneEmpty(true);
             }
+            if(isEmpty(userId)){
+                setIsUserIdEmpty(true);
+            }
             if(isEmpty(password)){
                 setIsPasswordEmpty(true);
             }
@@ -114,9 +155,12 @@ export default function SignUpForm(){
 
         }
 
+        //회원가입 api 호출
+        joinSubmit();
         //회원가입 성공시
-        alert("회원가입 성공!");
-        navigate("/signUpComplete");
+        
+        
+        // navigate("/signUpComplete");
 
     }
 
@@ -138,8 +182,9 @@ export default function SignUpForm(){
                 margin="0 0 40px 0"
             />
 
-            <EmailForm onVerificationSuccess={() => { SetIsVerified(true)}}
+            <EmailForm onVerificationSuccess={() => { setIsVerified(true)}}
                         triggerEmailSubmitError={emailSubmitError}
+                        onValueChange={handleEmailValueChange}
             />
             {/* 인증 완료시 문구 출력 */}
             <VerifiedMessageBox>
@@ -162,6 +207,22 @@ export default function SignUpForm(){
                 error={phoneHasError || isPhoneEmpty ? "※010-0000-0000 형식으로 입력해주세요." : null}
                 shake={submitAttempt}
                 margin="30px 0 40px 0"
+            />
+
+            <Input
+                type="text"
+                text="아이디"
+                id="userId"
+                placeholder=" 아이디"
+                value={userId}
+                onChange={(e)=>{
+                    userIdInputHandler(e),
+                    setSubmitAttemt(false),
+                    setIsUserIdEmpty(false)
+                }}
+                error={userIdHasError || isUserIdEmpty ? "※영어와 숫자를 혼합 (4~12자)" : null}
+                shake={submitAttempt}
+                margin="0 0 40px 0"
             />
 
             <Input
