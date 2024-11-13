@@ -4,6 +4,7 @@ import { useInput } from "../../hooks/useInput";
 import { FormLayout, TitleLayout } from "../../style/formLayout";
 import {SmallButton} from "../buttons/SmallButton";
 import { isEmail, isEmpty, isMaxLength, isEqualLength } from "../../utils/validation";
+import axiosInstance from "../../api/axiosInstance";
 
 //인증번호 더미데이터
 const certificationNum = "000000";
@@ -25,7 +26,51 @@ export default function EmailForm({ onVerificationSuccess }){
         inputHandler: emailInputHandler,
      } = useInput('', (value) => isEmpty(value) || isEmail(value));
 
-     const sendCertificationNum = (e) => {
+     
+    //이메일 인증 성공 시 이메일과 인증 코드를 상위 컴포넌트에게 전달
+    const handleVerifyEmail = () => {
+        onVerificationSuccess(emailValue, certificationValue);
+    }
+
+
+    //이메일 인증번호 생성 api호출
+    const findPasswordEmailCodeSubmit = async () => {
+        const requestData = {
+            email: emailValue
+        };
+
+        try {
+          const response = await axiosInstance.post('/email/authcode/findPassword', requestData);
+          console.log(response.data);
+          alert("인증번호가 전송되었습니다. 이메일을 확인해주세요.");
+        } catch (error) {
+          console.error('API 요청 오류:', error);
+          alert(error.response.data.message);
+        }
+      };
+      
+    //이메일 인증번호 검증 api호출
+    const verifyEmailCodeSubmit = async () => {
+        const requestData = {
+            email: emailValue,
+            code: certificationValue
+        };
+
+        try{
+            const response = await axiosInstance.post('/email/authcode', requestData);
+            console.log(response.data);
+            alert("인증 성공");
+            
+            // 인증 성공 시 상위 컴포넌트에서 전달된 콜백 호출
+            handleVerifyEmail();
+        } catch (error) {
+            console.error('API 요청 오류:', error);
+            alert(error.response.data.message);
+            setCertificationHasError(true);
+        }
+    };
+
+    const sendCertificationNum = (e) => {
         //이메일 전송 시 형식이 안맞으면 전송을 막고 에러를 띄움
         if (emailHasError || isEmpty(emailValue)){
             e.preventDefault();
@@ -37,7 +82,8 @@ export default function EmailForm({ onVerificationSuccess }){
         }
         //submit을 하면 isSubmit을 true로 변경
         else{
-            alert('이메일 전송');
+            //인증코드 전송 요청
+            findPasswordEmailCodeSubmit();
             setIsSubmit(true);
             setEmailSubmitError(false);
         }
@@ -81,19 +127,9 @@ export default function EmailForm({ onVerificationSuccess }){
             //서버로 값 전송
             else{
                 setCertificationHasError(false);
-                alert("인증번호 검증");
-            
-                //인증 성공
-                if(certificationValue == certificationNum){
-                    alert("인증성공!");
 
-                    // 인증 성공 시 상위 컴포넌트에서 전달된 콜백 호출
-                    onVerificationSuccess(); 
-                }
-                //인증 실패
-                else{
-                    setCertificationHasError(true);
-                }
+                //인증 api함수 호출
+                verifyEmailCodeSubmit();
             }
         }
     }

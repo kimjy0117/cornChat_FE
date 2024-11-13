@@ -37,6 +37,14 @@ const FindPwAreaStyle = styled.div`
 export default function FindPwArea(){
     //이메일 인증 여부
     const [isVerified, setIsVerified] = useState(false);
+    const [verifiedEmail, setVerifiedEmail] = useState('');
+    const [verificationCode, setVerificationCode] = useState('');
+
+    const handleVerificationSuccess = (email, code) => {
+        setIsVerified(true);
+        setVerifiedEmail(email);
+        setVerificationCode(code);
+    }
 
     return(
         <FindPwAreaStyle>
@@ -45,7 +53,9 @@ export default function FindPwArea(){
                 <FindPwAreaTop />
 
                 {/* 이메일 인증 성공 여부에 따라 다른 폼 렌더링 */}
-                {isVerified ? <ResetPwForm /> : <EmailForm onVerificationSuccess={() => setIsVerified(true)} />}
+                {isVerified 
+                ? <ResetPwForm verifiedEmail={verifiedEmail} verificationCode={verificationCode} />
+                : <EmailForm onVerificationSuccess={handleVerificationSuccess} />}
                 
             </div>
         </FindPwAreaStyle>

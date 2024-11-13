@@ -6,6 +6,7 @@ import { useInput } from "../../hooks/useInput";
 import { isEmpty, isPw, isEqualValue } from "../../utils/validation";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../api/axiosInstance";
 
 const ResetPwArea = styled.div`
     width: 80%;
@@ -16,7 +17,7 @@ const ResetPwArea = styled.div`
     justify-content: center;
 `;
 
-export default function ResetPwForm(){
+export default function ResetPwForm({ verifiedEmail, verificationCode }){
     const [submitAttempt, setSubmitAttempt] = useState(false);
     const [isPwValueEmpty, setIsPwValueEmpty] = useState(false);
     const [isCheckPwValueEmpty, setIsCheckPwValueEmpty] = useState(false);
@@ -36,6 +37,25 @@ export default function ResetPwForm(){
         inputHandler: checkPwInputHandler,
     } = useInput('', (value) => isEmpty(value) || isEqualValue(value, pwValue));
 
+    //비밀번호 변경 api 호출
+    const findPwSubmit = async () => {
+        const requestData = {
+            email: verifiedEmail,
+            code: verificationCode,
+            password: pwValue
+        };
+
+        try{
+            const response = await axiosInstance.patch('/user/findPw', requestData);
+            console.log(response.data);
+            navigate('/findPwComplete');
+            
+        } catch (error) {
+            console.error('API 요청 오류:', error);
+            alert(error.response.data.message);
+        }
+    };
+
     //비밀번호 변경 버튼을 눌렀을 때 처리
     const handleSubmit = (e) => {
         //비밀번호 에러시 submit 막음
@@ -53,8 +73,8 @@ export default function ResetPwForm(){
             return;
         }
 
-        alert("비밀번호 변경 완료");
-        navigate('/findPwComplete');
+        //비밀번호 변경 api 호출
+        findPwSubmit();        
     }
 
     return (
