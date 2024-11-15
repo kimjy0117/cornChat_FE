@@ -3,7 +3,7 @@ import Input from "../input/Input";
 import { useInput } from "../../hooks/useInput";
 import { isEmpty, isName, isMinMaxLength, isEqualLength, isMaxLength, isPw, isUserId, isEqualValue } from "../../utils/validation";
 import EmailForm from "./EmailForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LargeButton } from "../buttons/LargeButton";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
@@ -39,6 +39,8 @@ export default function SignUpForm(){
     const [isCheckPasswordEmpty, setIsCheckPasswordEmpty] = useState(false);
     const [phone, setPhone] = useState('');
     const [phoneHasError, setPhoneHasError] = useState(false);
+    const [isCheckPhoneDup, setIsCheckPhoneDup] = useState(false);
+    const [isCheckUserIdDup, setIsCheckUserIdDup] = useState(false);
     const [submitAttempt, setSubmitAttemt] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
     const [email, setEmail] = useState('');
@@ -73,6 +75,40 @@ export default function SignUpForm(){
         inputHandler: checkPasswordInputHandler,
     } = useInput('', (value) => isEmpty(value) || isEqualValue(value, password));
 
+
+    //전화번호 중복검사 api호출
+    const checkPhoneDup = async () => {
+        const requestData = {
+            phoneNum: phone.replace(/-/g, "")
+        };
+
+        try{
+            const response = await axiosInstance.get('/user/checkPhoneNum', {params: requestData});
+            console.log(response.data);
+            setIsCheckPhoneDup(response.data.data);
+
+        } catch (error) {
+            console.error('API 요청 오류:', error);
+            alert(error.response.data.message);
+        }
+    }
+
+    //아이디 중복검사 api호출
+    const checkUserIdDup = async () => {
+        const requestData = {
+            userId: userId
+        };
+
+        try{
+            const response = await axiosInstance.get('/user/checkUserId', {params: requestData});
+            console.log(response.data);
+            setIsCheckUserIdDup(response.data.data);
+
+        } catch (error) {
+            console.error('API 요청 오류:', error);
+            alert(error.response.data.message);
+        }
+    }
 
     //회원가입 api호출
     const joinSubmit = async () => {
@@ -123,11 +159,38 @@ export default function SignUpForm(){
         setPhone(phoneNumber);
     }
 
+    //전화번호 중복검사 함수 호출
+    useEffect(() => {
+        //전화번호가 비어있지 않고, 에러가 없을 때 api호출
+        if(!isEmpty(phone)  && !phoneHasError){
+            const delayDebounceFn = setTimeout(() => {
+                checkPhoneDup();
+            }, 200); // 과도한 api호출을 막기 위해 0.2초 후에 api호출
+
+            return () => clearTimeout(delayDebounceFn); // cleanup
+        }
+    }, [phone])
+
+
+    //아이디 중복검사 함수 호출
+    useEffect(() => {
+        //아이디가 비어있지 않고, 에러가 없을 때 api호출
+        if(!isEmpty(userId)  && !userIdHasError){
+            const delayDebounceFn = setTimeout(() => {
+                checkUserIdDup();
+            }, 800); // 과도한 api호출을 막기 위해 0.8초 후에 api호출
+
+            return () => clearTimeout(delayDebounceFn); // cleanup
+        }
+    }, [userId])
+
+
     //회원가입 버튼 클릭 시 이벤트
     const handleSubmit = (e) => {
-        //이름, 이메일, 연락처, 아이디, 비밀번호 에러시 submit 막음
+        //이름, 이메일, 연락처, 아이디, 비밀번호 에러 시 submit 막음
         if(isEmpty(name) || isEmpty(phone) || isEmpty(userId) || isEmpty(password) || isEmpty(checkPassword) || !isVerified
-            || nameHasError || phoneHasError || userIdHasError || passwordHasError || checkPasswordHasError){
+            || nameHasError || phoneHasError || userIdHasError || passwordHasError || checkPasswordHasError
+            || isCheckPhoneDup || isCheckUserIdDup){
             e.preventDefault();
             setSubmitAttemt(true);
 
@@ -157,11 +220,6 @@ export default function SignUpForm(){
 
         //회원가입 api 호출
         joinSubmit();
-        //회원가입 성공시
-        
-        
-        // navigate("/signUpComplete");
-
     }
 
     return(
@@ -204,7 +262,8 @@ export default function SignUpForm(){
                     setSubmitAttemt(false),
                     setIsPhoneEmpty(false)
                 }}
-                error={phoneHasError || isPhoneEmpty ? "※010-0000-0000 형식으로 입력해주세요." : null}
+                error={phoneHasError || isPhoneEmpty ? "※010-0000-0000 형식으로 입력해주세요." : 
+                        isCheckPhoneDup ? "※이미 존재하는 전화번호입니다." : null}
                 shake={submitAttempt}
                 margin="30px 0 40px 0"
             />
@@ -220,7 +279,8 @@ export default function SignUpForm(){
                     setSubmitAttemt(false),
                     setIsUserIdEmpty(false)
                 }}
-                error={userIdHasError || isUserIdEmpty ? "※영어와 숫자를 혼합 (4~12자)" : null}
+                error={userIdHasError || isUserIdEmpty ? "※영어와 숫자를 혼합 (4~12자)" : 
+                        isCheckUserIdDup ? "※이미 존재하는 아이디입니다." : null}
                 shake={submitAttempt}
                 margin="0 0 40px 0"
             />

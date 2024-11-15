@@ -39,7 +39,7 @@ export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitErr
         try {
           const response = await axiosInstance.post('/email/authcode/join', requestData);
           console.log(response.data);
-          alert("api 요청 성공");
+          alert("이메일 전송 완료!");
         } catch (error) {
           console.error('API 요청 오류:', error);
           alert(error.response.data.message);
