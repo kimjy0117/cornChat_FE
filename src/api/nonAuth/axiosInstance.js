@@ -2,21 +2,9 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
     baseURL: "http://localhost:8080/api",
-    timeout: 7000,
+    // timeout: 10000,
     withCredentials: true,
 });
-
-axiosInstance.interceptors.request.use(
-    config => {
-        const accessToken = sessionStorage.getItem('access');
-
-        if(accessToken){
-            config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-        return config;
-    },
-    error => Promise.reject(error),
-);
 
 export default axiosInstance;
 
