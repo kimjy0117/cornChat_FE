@@ -24,6 +24,7 @@ axiosInstanceForAuth.interceptors.request.use(
 axiosInstanceForAuth.interceptors.response.use(
   (response) => response, // 성공 응답은 그대로 전달
   async (error) => {
+    // const navigate = useNavigate();
       const originalRequest = error.config;
 
       // Access Token 만료 시 처리 (401 Unauthorized)
@@ -49,11 +50,14 @@ axiosInstanceForAuth.interceptors.response.use(
               return axiosInstanceForAuth(originalRequest);
           } catch (refreshError) {
               // Refresh Token도 만료된 경우 로그아웃 처리
-              console.error("리프레시토큰이 만료되었습니다.. 로그아웃됩니다...");
               window.location.href = "/"; // 시작 페이지로 이동
-              // navigate("/");
+              console.error("리프레시토큰이 만료되었습니다.. 로그아웃됩니다...");
               return Promise.reject(refreshError);
           }
+      }
+      else {
+        window.location.href = "/"; // 시작 페이지로 이동
+        console.error("엑세스토큰 값이 잘못되었습니다.. 로그아웃됩니다...");
       }
 
       // 다른 에러는 그대로 반환
