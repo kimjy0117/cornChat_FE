@@ -1,17 +1,17 @@
 import React from "react";
-import { useEffect } from "react";
 import styled from "styled-components";
 import addFriendImg from "../../../assets/globalImages/addFriend.png"
-import settingImg from "../../../assets/globalImages/setting.png"
+import settingImg from "../../../assets/globalImages/settingImg.png"
 import { ContextMenu } from "../../../style/contextMenuStyle";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/nonAuth/axiosInstance";
+import axiosInstanceForAuth from "../../../api/auth/axiosInstanceForAuth";
 
 const FriendsHeaderStyle = styled.div`
     //레이아웃
     width: 100%;
     height: 50px;
-    margin: 30px 0 20px 0;
+    margin: 30px 0 10px 0;
     
     display: flex;
     flex-direction: row;
@@ -61,7 +61,7 @@ export default function FriendsHeader({ onAddFriendClick, contextMenu, handleSet
     //회원탈퇴 api 호출
     const deleteUserSubmit = async () => {
         try{
-            await axiosInstance.delete('/user/delete');
+            await axiosInstanceForAuth.delete('/user/delete');
 
             //로컬스토리지에서 토큰 제거
             localStorage.removeItem("accessToken");

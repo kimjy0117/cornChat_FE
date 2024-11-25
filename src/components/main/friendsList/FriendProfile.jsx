@@ -58,7 +58,8 @@ const ProfileImage = styled.img`
 
 export default function FriendProfile({friend, contextMenu, onContextMenu, onSuccess }){
     // 컨텍스트 메뉴가 현재 친구에 해당하는지 확인
-    const isMenuVisible = contextMenu.friend_visible && contextMenu.friendId === friend.friendId;
+    const isMenuVisible = contextMenu?.friend_visible && contextMenu?.friendId === friend.friendId;
+    // const isMenuVisible = contextMenu.friend_visible && contextMenu.friendId === friend.friendId;
 
     //친구 이름 변경 api 호출
     const setFriendNameSubmit = async (newName) => {
@@ -90,6 +91,23 @@ export default function FriendProfile({friend, contextMenu, onContextMenu, onSuc
             alert(error.response.data.message);
         }
     }
+
+    //개인 채팅방 생성 api로직
+    //dm채팅방 생성 api로직
+    const createDmChatRoomSubmit = async () => {
+        const requestData = {
+            friendId: friend.friendId
+        };
+        try{
+            const response = await axiosInstanceForAuth.post('/chatrooms/dm', requestData);
+            console.log(response.data);
+            //성공시 재랜더링
+            onSuccess();
+        } catch (error){
+            console.error('API 요청 오류:', error);
+            alert(error.response.data.message);
+        }
+    }
     
     //친구 프로필
     //이름 수정
@@ -106,6 +124,7 @@ export default function FriendProfile({friend, contextMenu, onContextMenu, onSuc
     const onChat = () => {
         alert(`${friend}님과의 채팅방이 열립니다!`);
         //api호출
+        createDmChatRoomSubmit();
     }
 
     //친구 삭제
@@ -120,7 +139,7 @@ export default function FriendProfile({friend, contextMenu, onContextMenu, onSuc
         <>
             <StyledFriendProfile
                 className = "friendProfile"
-                onDoubleClick={() => onChatFriend(friend)} //더블 클릭 시 
+                onDoubleClick={() => onChat()} //더블 클릭 시 
                 onContextMenu={(e) => onContextMenu(e, friend.friendId)}
             >
                 <div className="profileImg">

@@ -19,6 +19,12 @@ const ProfileContainer = styled.div`
     background-color: white;
     border-radius: 10px;
 
+    & .profileImg{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
     & .info{
         display: flex;
         flex-direction: column;
@@ -27,7 +33,7 @@ const ProfileContainer = styled.div`
     }
 
     & .name{
-        margin: 5px 0 5px 0;
+        margin: 5px 0 2px 0;
         font-size: 20px;
         font-weight: 500;
     }

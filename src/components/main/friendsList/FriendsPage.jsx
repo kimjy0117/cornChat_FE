@@ -3,7 +3,6 @@ import MyProfile from "./MyProfile";
 import FriendList from "./FriendsList";
 import FriendsHeader from "./FriendsHeader";
 import AddFriendModal from "./AddFriendModal";
-import axiosInstanceForAuth from "../../../api/auth/axiosInstanceForAuth";
 import styled from "styled-components";
 import {ScrollStyle} from "../../../style/scrollStyle"
 
@@ -26,10 +25,13 @@ const FriendsPageStyle = styled.div`
         width: 290px;
         color: #c7c7c7;
     }
-
 `;
 
-export default function FriendsPage(){
+const ScrollContainer = styled(ScrollStyle)`
+    height: calc(100% - 110px);
+`;
+
+export default function FriendsPage({myProfile, friends, onSuccess}){
     //우클릭 컨텍스트 메뉴
     const [contextMenu, setContextMenu] = useState({ my_visible: false, friend_visible: false, setting_visible: false, friendId: null, x: 0, y: 0 });
 
@@ -37,15 +39,7 @@ export default function FriendsPage(){
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-  
-    //프로필 정보
-    const [myProfile, setMyProfile] = useState({
-        userName: "",
-        userId: "",
-        statusMessage: "",
-    });
-    const [friends, setFriends] = useState([]);
-    
+
     // 내 프로필 컨텍스트 메뉴 우클릭 핸들러
     const handleMyContextMenu = (e) => {
         e.preventDefault();
@@ -70,32 +64,6 @@ export default function FriendsPage(){
         setContextMenu({ my_visible: false, friend_visible: false, setting_visible: false, friendId: null, x: 0, y: 0 });
     };
 
-
-    //사용자 정보 가져오는 api호출
-    const getDataSubmit = async () => {
-        try {
-            const myProfileResponse = await axiosInstanceForAuth.get('/user/profile');
-            setMyProfile(myProfileResponse.data.data);
-
-            const friendsResponse = await axiosInstanceForAuth.get('/friends');
-            setFriends(friendsResponse.data.data);
-
-        } catch (error) {
-            console.error('API 요청 오류:', error);
-        }
-    };
-
-    // 페이지 렌더링 시 API 호출
-    useEffect(() => {
-        getDataSubmit();
-    }, []); // 빈 배열을 넣으면 컴포넌트가 처음 마운트될 때 한 번만 실행됨
-
-    // 친구 추가 및 친구 목록 갱신
-    const handleAddFriendSuccess = () => {
-        getDataSubmit();  // 친구가 추가된 후 목록을 다시 갱신
-    };
-
-
     return (
         <FriendsPageStyle
             onClick={closeContextMenu}>
@@ -109,23 +77,25 @@ export default function FriendsPage(){
             <AddFriendModal 
                 isOpen={isModalOpen} 
                 closeModal={closeModal} 
-                onSuccess={handleAddFriendSuccess}    
+                onSuccess={onSuccess}    
             />
     
-            <ScrollStyle>
-                {/* 내 프로필 */}
-                <MyProfile profile={myProfile}
-                        contextMenu={contextMenu}
-                        onContextMenu={handleMyContextMenu}
-                        onSuccess={handleAddFriendSuccess}/>
-                <hr/>
+            <ScrollContainer>
+                <ScrollStyle>
+                    {/* 내 프로필 */}
+                    <MyProfile profile={myProfile}
+                            contextMenu={contextMenu}
+                            onContextMenu={handleMyContextMenu}
+                            onSuccess={onSuccess}/>
+                    <hr/>
 
-                <p>친구 {friends.length}</p>
-                <FriendList friends={friends}
-                    contextMenu={contextMenu}
-                    onContextMenu={handleFriendContextMenu}
-                    onSuccess={handleAddFriendSuccess} />
-            </ScrollStyle>
+                    <p>친구 {friends.length}</p>
+                    <FriendList friends={friends}
+                        contextMenu={contextMenu}
+                        onContextMenu={handleFriendContextMenu}
+                        onSuccess={onSuccess} />
+                </ScrollStyle>
+            </ScrollContainer>
         </FriendsPageStyle>
     );
 };
