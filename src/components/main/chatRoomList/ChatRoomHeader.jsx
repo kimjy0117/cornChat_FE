@@ -48,7 +48,7 @@ export default function ChatRoomHeader({ onCreateChatRoomClick }){
                 </div>
 
                 <div className="buttons">
-                    <BusttonImage src={createChatRoomImg} alt="새로운 채팅" onClick={onCreateChatRoomClick}/>
+                    <BusttonImage title="새로운 채팅방 생성" src={createChatRoomImg} alt="새로운 채팅" onClick={onCreateChatRoomClick}/>
                 </div>
             </ChatRoomHeaderStyle>
         </>

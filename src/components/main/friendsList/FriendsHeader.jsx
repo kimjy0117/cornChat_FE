@@ -101,8 +101,8 @@ export default function FriendsHeader({ onAddFriendClick, contextMenu, handleSet
                 </div>
 
                 <div className="buttons">
-                    <BusttonImage src={addFriendImg} alt="친구추가" onClick={onAddFriendClick}/>
-                    <BusttonImage src={settingImg} alt="설정" onClick={handleSettingContextMenu} />
+                    <BusttonImage title="친구추가" src={addFriendImg} alt="친구추가" onClick={onAddFriendClick}/>
+                    <BusttonImage title="설정" src={settingImg} alt="설정" onClick={handleSettingContextMenu} />
                 </div>
             </FriendsHeaderStyle>
 
