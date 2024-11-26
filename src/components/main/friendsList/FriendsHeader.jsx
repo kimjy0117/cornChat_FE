@@ -39,8 +39,17 @@ const BusttonImage = styled.img`
     width: 25px; /* 원하는 크기로 조정 */
     height: 25px; /* 이미지 비율을 유지 */
 
+    border-radius: 10%;
+
     //효과
     cursor: pointer;
+
+    &:hover {
+        background-color: #f0f0f0; /* 회색 음영 */
+    }
+    &:active {
+        background-color: #e0e0e0; /* 클릭 시 조금 더 진한 음영 */
+    }
 `;
 
 

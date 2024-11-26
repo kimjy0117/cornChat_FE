@@ -259,14 +259,14 @@ export default function AddFriendModal({isOpen, closeModal, onSuccess }){
         <Overlay>
             <ModalContainer>
                 <TopContainer>
-                    <CloseButton onClick={closeModal}>x</CloseButton>
+                    <CloseButton title="닫기" onClick={closeModal}>x</CloseButton>
                 </TopContainer>
 
                 <Title>친구추가</Title>
 
                 <ButtonGroup>
-                    <ButtonDiv onClick={() => handleButtonClick("id")} type={inputType==="id"}>ID로 추가</ButtonDiv>
-                    <ButtonDiv onClick={() => handleButtonClick("phone")} type={inputType==="phone"}>
+                    <ButtonDiv title="콘챗ID로 친구추가" onClick={() => handleButtonClick("id")} type={inputType==="id"}>ID로 추가</ButtonDiv>
+                    <ButtonDiv title="전화번호로 친구추가" onClick={() => handleButtonClick("phone")} type={inputType==="phone"}>
                         전화번호로 추가
                     </ButtonDiv>
                 </ButtonGroup>

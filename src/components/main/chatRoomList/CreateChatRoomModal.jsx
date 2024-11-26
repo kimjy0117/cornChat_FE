@@ -265,7 +265,7 @@ export default function CreateChatRoomModal({friends, isOpen, closeModal, onSucc
         <Overlay>
             <ModalContainer>
                 <TopContainer>
-                    <CloseButton onClick={closeModal}>x</CloseButton>
+                    <CloseButton title="닫기" onClick={closeModal}>x</CloseButton>
                 </TopContainer>
                 <Title>대화상대 추가</Title>
 
