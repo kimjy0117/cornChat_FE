@@ -18,6 +18,12 @@ export function isPw(value){
     return pwPattern.test(value);
 }
 
+//채팅방 제목 검증
+export function isTitle(value){
+    //1~15자리
+    return value.length > 0 && value.length <= 15;
+}
+
 //문자열이 비어있는지 검증
 export function isEmpty(value){
     return !value || value.trim() === '';
