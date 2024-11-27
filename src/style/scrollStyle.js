@@ -1,9 +1,6 @@
 import styled from "styled-components";
 
 export const ScrollStyle = styled.div`
-    height: 70%;
-    /* padding-right: 10px; */
-
     overflow-y: auto;  // 내용이 넘칠 때 세로 스크롤 추가
     overflow-x: hidden;
     flex: 1; /* 남은 공간을 스크롤 영역으로 확장 */
