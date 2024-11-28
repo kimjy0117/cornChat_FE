@@ -34,7 +34,7 @@ const FriendsHeaderStyle = styled.div`
     }
 `;
 
-const BusttonImage = styled.img`
+const ButtonImage = styled.img`
     //레이아웃
     width: 25px; /* 원하는 크기로 조정 */
     height: 25px; /* 이미지 비율을 유지 */
@@ -110,8 +110,8 @@ export default function FriendsHeader({ onAddFriendClick, contextMenu, handleSet
                 </div>
 
                 <div className="buttons">
-                    <BusttonImage title="친구추가" src={addFriendImg} alt="친구추가" onClick={onAddFriendClick}/>
-                    <BusttonImage title="설정" src={settingImg} alt="설정" onClick={handleSettingContextMenu} />
+                    <ButtonImage title="친구추가" src={addFriendImg} alt="친구추가" onClick={onAddFriendClick}/>
+                    <ButtonImage title="설정" src={settingImg} alt="설정" onClick={handleSettingContextMenu} />
                 </div>
             </FriendsHeaderStyle>
 
