@@ -13,14 +13,14 @@ const SignUpLayout = styled.div`
     align-items: center;
 
     //스타일
-    background-color:#fffdea;
+    background-color:#f1edc8;
 `;
 
 export default function SignUp(){
     return(
         <>
             <BackgroundStyle 
-                backgroundColor="#fffdea"
+                backgroundColor="#f1edc8"
             />
             <Header/>
             <SignUpLayout>
