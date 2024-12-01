@@ -4,11 +4,7 @@ import { useInput } from "../../hooks/useInput";
 import { FormLayout, TitleLayout } from "../../style/formLayout";
 import {SmallButton} from "../buttons/SmallButton";
 import { isEmail, isEmpty, isMaxLength, isEqualLength } from "../../utils/validation";
-import axiosInstance from "../../api/axiosInstance";
-
-
-//인증번호 더미데이터
-const certificationNum = "000000";
+import axiosInstance from "../../api/nonAuth/axiosInstance";
 
 export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitError, onValueChange }){
     const [isShake, setIsShake] = useState(false);
@@ -44,7 +40,7 @@ export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitErr
           console.error('API 요청 오류:', error);
           alert(error.response.data.message);
         }
-      };
+    };
 
     //이메일 인증번호 검증 api호출
     const verifyEmailCodeSubmit = async () => {
@@ -84,7 +80,6 @@ export default function EmailForm({ onVerificationSuccess, triggerEmailSubmitErr
         else{
             //인증코드 전송요청
             joinEmailCodeSubmit();
-            alert('이메일 전송');
             setIsSubmit(true);
             setEmailSubmitError(false);
         }

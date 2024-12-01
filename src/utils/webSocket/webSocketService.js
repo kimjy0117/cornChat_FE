@@ -13,11 +13,11 @@ export default function useWebSocketService(){
         // 토큰을 localStorage에서 가져오기 (로그인 시 저장된 토큰)
         const token = getToken();
 
-        // 이미 연결되어 있으면 재연결하지 않음
-        if (stompClient.current && isConnected.current) {
-            console.log("Already connected to WebSocket");
-            return; 
-        }
+        // // 이미 연결되어 있으면 재연결하지 않음
+        // if (stompClient.current && isConnected.current) {
+        //     console.log("Already connected to WebSocket");
+        //     return; 
+        // }
 
         const socket = new SockJS("http://localhost:8080/ws");
         const client = Stomp.over(socket);
@@ -100,5 +100,21 @@ export default function useWebSocketService(){
         return subscription; // 구독 정보를 반환하여 필요 시 관리할 수 있도록 함
     };
 
-    return { connect, disconnect, sendMessage, subscribeToRooms, subscribeToRoom };
+    // 알람 채팅방 구독
+    const subscribeToAlarm = (onMessageReceived) => {
+        if (!stompClient.current){
+            return;
+        }
+
+        // 채팅방 구독
+        const subscription = stompClient.current.subscribe("/topic/notifications", (message) => {
+            const notification = JSON.parse(message.body);
+            // console.log(notification);
+            onMessageReceived(notification); // 메시지를 콜백 함수로 전달
+        });
+
+        return subscription; // 구독 정보를 반환하여 필요 시 관리할 수 있도록 함
+    };
+
+    return { connect, disconnect, sendMessage, subscribeToRooms, subscribeToRoom, subscribeToAlarm };
 };

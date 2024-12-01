@@ -2,6 +2,7 @@ import LoginArea from "../../components/login/LoginArea";
 import Header from "../../components/Header";
 import styled from "styled-components";
 import { BackgroundStyle } from "../../components/BackgroundStyle";
+import "../../assets/font/font.css"
 
 const LoginLayout = styled.div`
     width: 100%;
@@ -14,11 +15,13 @@ const LoginLayout = styled.div`
 
 const TitleStyle = styled.span`
     text-align: center;
+    font-family: "NanumGothic";
     font-size: 2.5rem;
     font-weight: 800;
     color: #ff5900;
     text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
     margin-bottom: 15px;
+
 `;
 
 export default function Login(){

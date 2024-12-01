@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import profileImg from "../../../assets/globalImages/blue_prorofileImg2.png";
+import profileImg from "../../../assets/globalImages/blue_profileImg2.png";
 import { ContextMenu } from "../../../style/contextMenuStyle";
 import axiosInstanceForAuth from "../../../api/auth/axiosInstanceForAuth";
 
@@ -34,14 +34,18 @@ const ProfileContainer = styled.div`
 
     & .name{
         margin: 5px 0 2px 0;
+
+        font-family: "nanumgothic";
         font-size: 20px;
         font-weight: 500;
     }
 
     & .status{
         margin: 0 0 5px 5px;
-        font-size: 12px;
-        font-weight: 300;
+
+        font-family: "nanumgothic";
+        font-size: 13px;
+        font-weight: 400;
         color: #484848;
     }
 
@@ -116,7 +120,7 @@ export default function MyProfile({ profile, contextMenu, onContextMenu, onSucce
 
     //챗방 열기
     const onChat = (profile) => {
-        alert(`${profile}, 나와의 채팅방이 열립니다!`);
+        // alert(`${profile}, 나와의 채팅방이 열립니다!`);
         //api호출
     }
 
@@ -146,7 +150,7 @@ export default function MyProfile({ profile, contextMenu, onContextMenu, onSucce
                 }}
             >
                 <ul>
-                    <li onClick={() => onChat(profile)}>나와의 채팅방 열기</li>
+                    {/* <li onClick={() => onChat(profile)}>나와의 채팅방 열기</li> */}
                     <li onClick={() => onRename(profile)}>이름 수정</li>
                     <li onClick={() => onSetStatus(profile)}>상태메시지 수정</li>
                 </ul>

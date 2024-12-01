@@ -1,19 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Logo from '../assets/globalImages/logo.png'
+import logo from '../assets/globalImages/logo.png'
 
 const HeaderLayout = styled.div`
     //레이아웃
     width: 90%;
-    height: 10vh;
+    height: 12vh;
     display: flex;
     justify-content: flex-start;
-    margin: 0 0 2% 7%;
+    margin: 2% 0 3vh 7%;
 `;
 
 const LogoImage = styled.img`
     //레이아웃
-    width: 250px; /* 원하는 크기로 조정 */
+    width: 270px; /* 원하는 크기로 조정 */
     height: 80px; /* 이미지 비율을 유지 */
 
     //효과
@@ -25,7 +25,7 @@ export default function Header(){
 
     return(
         <HeaderLayout>
-            <LogoImage src={Logo} alt="로고 이미지" onClick={()=>{navigate('/');}}/>
+            <LogoImage src={logo} alt="로고 이미지" onClick={()=>{navigate('/');}}/>
         </HeaderLayout>
     );
 }

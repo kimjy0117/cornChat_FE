@@ -51,7 +51,7 @@ const StyledInput = styled.input`
     
     &::placeholder{
         font-size: 15px;
-        color: #D3D3D3;
+        color: #828282;
     }
 
     //숫자 증감 버튼 제거

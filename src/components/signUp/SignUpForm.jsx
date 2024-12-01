@@ -6,7 +6,7 @@ import EmailForm from "./EmailForm";
 import { useEffect, useState } from "react";
 import { LargeButton } from "../buttons/LargeButton";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstance from "../../api/nonAuth/axiosInstance";
 
 const ButtonLayout = styled.div`
     //레이아웃
@@ -123,7 +123,7 @@ export default function SignUpForm(){
         try {
             const response = await axiosInstance.post('/user/join', requestData);
             console.log(response.data);
-            alert("회원가입 성공");
+            // alert("회원가입 성공");
             navigate("/signUpComplete");
         } catch (error) {
             console.error('API 요청 오류:', error);
@@ -196,7 +196,6 @@ export default function SignUpForm(){
 
             // 하위 컴포넌트에 에러를 객체로 전달(하위 컴포넌트 리렌더링을 위함)
             setEmailSubmitError({ hasError: true });
-            // setTriggerEmailSubmitError(true);
 
             //비어있으면 state변경
             if(isEmpty(name)){

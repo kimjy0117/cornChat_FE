@@ -4,7 +4,7 @@ import { useInput } from "../../hooks/useInput";
 import { FormLayout, TitleLayout } from "../../style/formLayout";
 import {SmallButton} from "../buttons/SmallButton";
 import { isEmail, isEmpty, isMaxLength, isEqualLength } from "../../utils/validation";
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstance from "../../api/nonAuth/axiosInstance";
 
 //인증번호 더미데이터
 const certificationNum = "000000";

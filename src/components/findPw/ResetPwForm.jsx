@@ -6,7 +6,8 @@ import { useInput } from "../../hooks/useInput";
 import { isEmpty, isPw, isEqualValue } from "../../utils/validation";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstance from "../../api/nonAuth/axiosInstance";
+
 
 const ResetPwArea = styled.div`
     width: 80%;

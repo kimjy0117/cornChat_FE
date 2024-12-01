@@ -3,9 +3,12 @@ import { useInput } from "../../hooks/useInput";
 import { LargeButton } from "../buttons/LargeButton";
 import { isMinLength, isMaxLength, isEmpty, isEmail} from "../../utils/validation"
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/nonAuth/axiosInstance";
 
 export default function Form(){
+    const navigate = useNavigate();
+
     // 에러가 발생했을 때 애니메이션을 트리거하기 위한 상태
     const [submitAttempt, setSubmitAttempt] = useState(false);
 
@@ -36,7 +39,8 @@ export default function Form(){
             const accessToken = response.headers['authorization']
             localStorage.setItem('accessToken', `${accessToken}`);
 
-            alert("로그인 성공");
+            // alert("로그인 성공");
+            navigate("/main");
           } catch (error) {
             console.error('API 요청 오류:', error);
             //로그인 검증 실패

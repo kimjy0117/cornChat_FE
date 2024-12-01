@@ -107,7 +107,7 @@ const MyMessage = styled.li`
         border-radius: .4em;
         padding: 8px;
 
-        font-family: 'nanumgothic';
+        font-family: "NanumGothic";
     }
 
     & .my-speech-bubble:after {
@@ -191,7 +191,7 @@ const FriendMessage = styled.li`
         border-radius: .4em;
         padding: 8px;
 
-        font-family: 'nanumgothic';
+        font-family: 'NanumGothic';
     }
 
     & .friend-speech-bubble:after {
@@ -422,8 +422,6 @@ export default function ChatRoom(){
             console.error("웹소켓이 연결되지 않았습니다.");
         }
     };
-
-
 
     return(
         <MainArea>

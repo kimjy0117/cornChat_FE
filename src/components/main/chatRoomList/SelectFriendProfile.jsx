@@ -1,5 +1,5 @@
 import React from "react";
-import profileImg from "../../../assets/globalImages/blue_prorofileImg.png";
+import profileImg from "../../../assets/globalImages/blue_profileImg.png";
 import styled from "styled-components";
 
 const StyledSelectFriendProfile = styled.li`
@@ -76,7 +76,6 @@ const SelectPoint = styled.div`
 `;
 
 export default function SelectFriendProfile({friend, isSelected, onSelectFriend}){
-    // console.log({isSelected});
     return (
         <StyledSelectFriendProfile
             onClick={() =>onSelectFriend(friend)}

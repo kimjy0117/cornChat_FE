@@ -8,7 +8,7 @@ export function useInput(value, validationFn) {
     const inputHandler = (e) => {
         setInputValue(e.target.value);
     }
-
+    
     //inputValue가 바뀔 때마다 검증
     useEffect(()=>{
         validationFn(inputValue);
@@ -17,6 +17,7 @@ export function useInput(value, validationFn) {
     return{
         value: inputValue,
         hasError: !valueIsValid,
-        inputHandler
+        inputHandler,
+        setInputValue
     };
 }

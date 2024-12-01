@@ -5,6 +5,7 @@ import styled from "styled-components";
 import FriendsPage from "../../components/main/friendsList/FriendsPage";
 import ChatRoomPage from "../../components/main/chatRoomList/chatRoomPage";
 import axiosInstanceForAuth from "../../api/auth/axiosInstanceForAuth";
+import useWebSocketService from "../../utils/webSocket/webSocketService";
 
 const MainLayout = styled.div`
     width: 100%;
@@ -28,7 +29,10 @@ const MainLayout = styled.div`
 `;
 
 export default function Main(){
-    const { messages, connectAndSubscribe } = useChat();
+    const { connect, disconnect, subscribeToAlarm} = useWebSocketService();
+
+    //알림 메시지
+    const [notification, setNotification] = useState(null);
 
     //친구 정보
     const [friends, setFriends] = useState([]);
@@ -46,14 +50,21 @@ export default function Main(){
     // 메시지가 갱신될때마다 재렌더링
     useEffect(() => {
         getDataSubmit();
-    }, [messages]);
+    }, [notification]);
 
-    // 채팅방 ID 변경 시 웹소켓 연결
+    //웹소켓 연결 및 알림서버 구독
     useEffect(() => {
-        if (chatRoomIds.length > 0) {
-            connectAndSubscribe(chatRoomIds);
-        }
-    }, [chatRoomIds, connectAndSubscribe]);
+        connect((stompClient) => {
+            subscribeToAlarm((notification) => {
+                console.log("연결은 됨?", notification);
+                //새로온 알람이 내 채팅방일 경우 메시지 교체 
+                if(chatRoomIds.includes(notification.roomId)){
+                    setNotification(notification);
+                    console.log(notification.content);
+                }
+            });
+        });
+    }, [chatRoomIds]);
 
     //채팅방, 친구 정보 가져오는 api호출
     const getDataSubmit = async () => {
