@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import axiosInstanceForAuth from "../../api/auth/axiosInstanceForAuth";
 import { ContextMenu } from "../../style/contextMenuStyle";
 import MemberListModal from "./MemberListModal";
+import { isTitle } from "../../utils/validation";
 
 const HeaderLayout = styled.div`
     //레이아웃
@@ -123,7 +124,7 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
     //모달
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    //채팅방 정보가 바뀔때마다 정보를 가져옴
+    //처음 정보 가져옴
     useEffect(() => {
         getChatRoomData();
     }, [])
@@ -145,6 +146,19 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
         }
     }
 
+    //채팅방 이름 바꾸기 api
+    const setChatRoomTItleSubmit = async (newChatRoomTitle) => {
+        try{
+            await axiosInstanceForAuth.patch(`/chatrooms/title/${roomId}?chatRoomTitle=${newChatRoomTitle}`);
+            //성공시 재렌더링
+            handleRender();
+        } catch (error) {
+            console.error('API 요청 오류:', error);
+            alert(error.response.data.message);
+        }
+
+    }
+
     //채팅방 나가기 api
     const deleteChatRoomSubmit = async () => {
         try {
@@ -156,6 +170,25 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
             alert(error.response.data.message);
         }
     };
+
+    //채팅방 이름 바꾸기
+    const setChatRoomTitle = () => {
+        const newChatRoomTitle = prompt(`새로운 채팅방 이름을 입력하세요`);
+
+        //채팅방 제목이 비어있으면
+        if(!newChatRoomTitle){
+            return;
+        }
+
+        //채팅방 제목이 형식에 안맞으면
+        else if(!isTitle(newChatRoomTitle)){
+            alert("채팅방 제목은 1~15자리로 입력해주세요.");
+            return;
+        }
+
+        //api호출
+        setChatRoomTItleSubmit(newChatRoomTitle);
+    }
 
     //채팅방 나가기
     const onDelete = () => {
@@ -215,6 +248,8 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
                 >
                     <ul>
                         <li onClick={() => toggleModal()}>멤버 확인하기</li>
+                        {chatRoomData.type == "GROUP" && 
+                            <li onClick={()=> setChatRoomTitle()}>채팅방 이름 변경</li>}
                         <li onClick={() => onDelete()}>채팅방 나가기</li>
                     </ul>
                 </ContextMenu>
