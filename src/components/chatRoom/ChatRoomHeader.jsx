@@ -7,7 +7,9 @@ import { useLocation } from "react-router-dom";
 import axiosInstanceForAuth from "../../api/auth/axiosInstanceForAuth";
 import { ContextMenu } from "../../style/contextMenuStyle";
 import MemberListModal from "./MemberListModal";
+import AddMemberModal from "./AddMemberModal";
 import { isTitle } from "../../utils/validation";
+
 
 const HeaderLayout = styled.div`
     //레이아웃
@@ -120,9 +122,13 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
 
     //채팅방 멤버 정보
     const [ members, setMembers ] = useState([]);
+    //친구 정보
+    const [friends, setFriends] = useState([]);
 
     //모달
     const [isModalOpen, setIsModalOpen] = useState(false);
+    //채팅 멤버 추가하는 모달
+    const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
 
     //처음 정보 가져옴
     useEffect(() => {
@@ -141,6 +147,11 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
             const response = await axiosInstanceForAuth.get(`/chatrooms/room/${roomId}`);
             setChatRoomData(response.data.data);
             setMembers(response.data.data.members);
+
+            //친구 정보 가져옴
+            const friendsResponse = await axiosInstanceForAuth.get("/friends");
+            setFriends(friendsResponse.data.data);
+
         } catch (error){
             console.error("API 요청 오류:", error);
         }
@@ -170,6 +181,9 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
             alert(error.response.data.message);
         }
     };
+
+    //대화상대 추가하기
+
 
     //채팅방 이름 바꾸기
     const setChatRoomTitle = () => {
@@ -203,6 +217,11 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
         setIsModalOpen(!isModalOpen);
     };
 
+    //대화상대 추가하기 모달 열기/닫기 토글 함수
+    const addMemberToggleModal = () => {
+        setIsAddMemberModalOpen(!isAddMemberModalOpen);
+    }
+
     return(
         <>
             <HeaderLayout>
@@ -234,8 +253,19 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
                 {/* 멤버 목록 모달 */}
                 {isModalOpen && <MemberListModal
                     members={members} 
+                    chatRoomData={chatRoomData}
                     onClose={toggleModal} 
                     onSuccess={handleRender} />}
+
+                {/* 채팅 멤버 추가 모달 */}
+                {isAddMemberModalOpen && <AddMemberModal
+                    members={members}
+                    friends={friends}
+                    chatRoomData={chatRoomData}
+                    onClose={addMemberToggleModal}
+                    onSuccess={handleRender}
+                />}
+
             </HeaderLayout>
 
             {contextMenu.visible && (
@@ -248,6 +278,8 @@ export default function ChatRoomHeader({contextMenu, onContextMenu}){
                 >
                     <ul>
                         <li onClick={() => toggleModal()}>멤버 확인하기</li>
+                        {chatRoomData.type == "GROUP" && 
+                            <li onClick={()=> addMemberToggleModal()}>대화상대 추가하기</li>}
                         {chatRoomData.type == "GROUP" && 
                             <li onClick={()=> setChatRoomTitle()}>채팅방 이름 변경</li>}
                         <li onClick={() => onDelete()}>채팅방 나가기</li>

@@ -16,16 +16,23 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContainer = styled.div`
+    //레이아웃
     position: absolute;
     top: 10px; /* 오른쪽 상단 위치 */
     right: 10px;
-    width: 200px;
-    max-height: 60%;
+    width: 250px;
+    max-height: 70%;
+    display: flex;
+    flex-direction: column; /* 자식 요소를 세로로 배치 */
+
+    //스타일
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 15px;
     z-index: 1000;
+    border: 1px solid #ccc; /* 디버깅용 테두리 */
+    overflow: hidden; /* 모달 내부에서만 스크롤 처리 */
 `;
 
 const CloseButton = styled.div`
@@ -33,10 +40,10 @@ const CloseButton = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: end;
+    flex-shrink: 0; /* 크기 고정 */
 
     padding: 0;
     margin-right: 10px;
-    /* background-color: transparent; */
     border: none;
     border-radius: 10%;
     font-size: 18px;
@@ -50,13 +57,34 @@ const CloseButton = styled.div`
 `;
 
 const Title = styled.p`
+    flex-shrink: 0; /* 크기 고정 */
     margin: 0 0 0 10px;
 
     //스타일
     font-family: "nanumgothic";
     font-size: 18px;
     font-weight: 500;
-`
+`;
+
+const ScrollContainer = styled(ScrollStyle)`
+    flex-grow: 1;
+    height: calc(100% - 100px);
+    /* overflow-y: auto; */
+
+    /* 스크롤바 스타일링 */
+    &::-webkit-scrollbar {
+        width: 7px;  /* 스크롤바의 너비 */
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #bebebe;  /* 스크롤바의 색상 */
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #8b8b8b;  /* 마우스를 올렸을 때 색상 */
+    }
+`;
 
 const UlStyle = styled.ul`
     list-style: none;
@@ -64,74 +92,74 @@ const UlStyle = styled.ul`
 `;
 
 const MemberList = styled.li`
-        padding: 10px;
-        border-bottom: 1px solid #eee;
-        border-radius: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    border-radius: 10px;
 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+
+    &:hover {
+        background-color: #f0f0f0;
+    }
+
+    & .myInfo{
+        margin-left: 10px;
+
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    & .userInfo{
+        margin-left: 10px;
+    }
+
+    & .userInfoArea{
+        //레이아웃
+        width: calc(100% - 40px);
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
+    }
+
+    & .addFriend{
+        width: 30px;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    & .addFriendButton{
+        //레이아웃
+        width: 30px;
+        height: 30px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
 
+        //스타일
+        border-radius: 20%;
+        font-size: 25px;
+        color: #a5a5a5;
+        background-color: #dbdada;
+
+        cursor: pointer;
+
+        & p{
+            margin: 0 0 4px 0;
+        }
 
         &:hover {
-            background-color: #f0f0f0;
+            color: #505050;
+            background-color: #959595;
         }
-
-        & .myInfo{
-            margin-left: 10px;
-
-            font-size: 17px;
-            font-weight: 700;
-        }
-
-        & .userInfo{
-            margin-left: 10px;
-        }
-
-        & .userInfoArea{
-            //레이아웃
-            width: calc(100% - 40px);
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-
-        & .addFriend{
-            width: 30px;
-            height: 100%;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        & .addFriendButton{
-            //레이아웃
-            width: 30px;
-            height: 30px;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            //스타일
-            border-radius: 20%;
-            font-size: 25px;
-            color: #a5a5a5;
-            background-color: #dbdada;
-
-            cursor: pointer;
-
-            & p{
-                margin: 0 0 4px 0;
-            }
-
-            &:hover {
-                color: #505050;
-                background-color: #959595;
-            }
-        }
+    }
 `;
 
 const ProfileImage = styled.img`
@@ -164,25 +192,6 @@ const Overlay = styled.div`
     font-weight: 700;
     border-radius: 30%;
 `;
-
-const ScrollContainer = styled(ScrollStyle)`
-    height: 100%;
-
-    /* 스크롤바 스타일링 */
-    &::-webkit-scrollbar {
-        width: 7px;  /* 스크롤바의 너비 */
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: #bebebe;  /* 스크롤바의 색상 */
-        border-radius: 4px;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-        background-color: #8b8b8b;  /* 마우스를 올렸을 때 색상 */
-    }
-`;
-
 
 export default function MemberListModal({ members, onClose, onSuccess }) {
     //아이디로 친구추가 api호출
