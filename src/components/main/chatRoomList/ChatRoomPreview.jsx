@@ -3,6 +3,7 @@ import styled from "styled-components";
 import profileImg from "../../../assets/globalImages/chatRoomProfileImg.png";
 import { ContextMenu } from "../../../style/contextMenuStyle";
 import axiosInstanceForAuth from "../../../api/auth/axiosInstanceForAuth";
+import "../../../assets/font/font.css"
 
 const StyledChatRoomProfile = styled.li`
     //레이아웃
@@ -38,22 +39,42 @@ const StyledChatRoomProfile = styled.li`
         align-items: start;
     }
 
+    & .titleDiv{
+        width: auto;
+        display: flex;
+        flex-direction: row;
+    }
+
     & .name{
         margin: 0 0 3px 0;
+
+        font-family: "NanumGothic";
         font-size: 15px;
         font-weight: 500;
     }
 
+    & .memberCount{
+        margin: 3px 0 0 3px;
+
+        font-size: 12px;
+        font-weight: 300;
+        color: #484848;
+    }
+
+
     & .date{
         margin: 0 4px 0 0;
+        font-family: "NanumGothic";
         font-size: 10px;
-        font-weight: 300;
+        font-weight: 500;
     }
 
     & .message{
         margin: 2px 0 3px 3px;
-        font-size: 10px;
-        font-weight: 300;
+
+        font-family: "NanumGothic";
+        font-size: 11px;
+        font-weight: 400;
         color: #484848;
     }
 
@@ -83,8 +104,8 @@ export default function ChatRoomPreview({chatRoom, contextMenu, onContextMenu, o
         ? `${chatRoom.title.substring(0, 13)}...` : chatRoom.title;
 
     // 채팅방 메시지가 너무 길면 자름
-    const subMessage = chatRoom.lastMessage.length > 25 
-        ? `${chatRoom.lastMessage.substring(0, 25)}...` : chatRoom.lastMessage;
+    const subMessage = chatRoom.lastMessage.length > 50 
+        ? `${chatRoom.lastMessage.substring(0, 50)}...` : chatRoom.lastMessage;
 
     useEffect(() => {
         if (!chatRoom.latestMessageAt) return;
@@ -135,12 +156,20 @@ export default function ChatRoomPreview({chatRoom, contextMenu, onContextMenu, o
             console.error('API 요청 오류:', error);
             alert(error.response.data.message);
         }
-    }
+    };
     
     //채팅방 열기
     const onChat = () => {
-        alert(`${chatRoom.title}채팅방이 열립니다!`);
-    }
+        const popup = window.open(
+            `/chatRoom?roomId=${chatRoom.id}`,
+            `ChatPopup_${chatRoom.id}`,
+            'width=500,height=600,scrollbars=no,toolbar=no,location=no,status=no,menubar=no'
+          );
+
+          if (!popup) {
+            alert('팝업이 차단되었습니다. 팝업 차단 설정을 확인해주세요.');
+          }
+    };
 
     //채팅방 나가기
     const onDelete = () => {
@@ -148,7 +177,7 @@ export default function ChatRoomPreview({chatRoom, contextMenu, onContextMenu, o
             //삭제 api 호출
             deleteChatRoomSubmit();
         }
-    }
+    };
 
     return (
         <>
@@ -162,7 +191,11 @@ export default function ChatRoomPreview({chatRoom, contextMenu, onContextMenu, o
 
                 <div className="info">
                     <div className="infoTop">
-                        <p className="name">{subTitle}</p>
+                        <div className="titleDiv">
+                            <p className="name">{subTitle}</p>
+                            {/* 개인 채팅방이 아니라면 사용자 수 출력 */}
+                            {chatRoom.type != "DM" && <p className="memberCount">{chatRoom.memberCount}</p>}
+                        </div>
                         <p className="date">{lastMessageDate}</p>
                     </div>
                     <p className="message">{subMessage}</p>
