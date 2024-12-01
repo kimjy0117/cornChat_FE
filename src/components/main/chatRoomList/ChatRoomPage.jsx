@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import ChatRoomHeader from "./chatRoomHeader";
+import ChatRoomHeader from "./ChatRoomHeader";
 import ChatRoomList from "./ChatRoomList";
 import CreateChatRoomModal from "./CreateChatRoomModal";
 import {ScrollStyle} from "../../../style/scrollStyle"

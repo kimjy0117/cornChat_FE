@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useChat } from "../../utils/contextApi/ChatContext";
 import { BackgroundStyle } from "../../components/BackgroundStyle";
 import styled from "styled-components";
 import FriendsPage from "../../components/main/friendsList/FriendsPage";
-import ChatRoomPage from "../../components/main/chatRoomList/chatRoomPage";
+import ChatRoomPage from "../../components/main/chatRoomList/ChatRoomPage";
 import axiosInstanceForAuth from "../../api/auth/axiosInstanceForAuth";
 import useWebSocketService from "../../utils/webSocket/webSocketService";
 
@@ -29,17 +28,16 @@ const MainLayout = styled.div`
 `;
 
 export default function Main(){
-    const { connect, disconnect, subscribeToAlarm} = useWebSocketService();
+    const { connect, subscribeToAlarm} = useWebSocketService();
 
     //알림 메시지
     const [notification, setNotification] = useState(null);
-
     //친구 정보
     const [friends, setFriends] = useState([]);
     //채팅방 정보
     const [chatRooms, setChatRooms] = useState([]);
-    //채팅방 아이디들 모음
-    const [chatRoomIds, setChatRoomIds] = useState([]);
+    // //채팅방 아이디들 모음
+    // const [chatRoomIds, setChatRoomIds] = useState([]);
     //내 프로필 정보
     const [myProfile, setMyProfile] = useState({
         userName: "",
@@ -54,17 +52,13 @@ export default function Main(){
 
     //웹소켓 연결 및 알림서버 구독
     useEffect(() => {
+        console.log("계속 구독을 하는건 아니지 않나?");
         connect((stompClient) => {
-            subscribeToAlarm((notification) => {
-                console.log("연결은 됨?", notification);
-                //새로온 알람이 내 채팅방일 경우 메시지 교체 
-                if(chatRoomIds.includes(notification.roomId)){
-                    setNotification(notification);
-                    console.log(notification.content);
-                }
+            subscribeToAlarm(myProfile.userId, (notification) => {
+                setNotification(notification);
             });
         });
-    }, [chatRoomIds]);
+    }, [chatRooms]);
 
     //채팅방, 친구 정보 가져오는 api호출
     const getDataSubmit = async () => {
@@ -73,9 +67,9 @@ export default function Main(){
             const chatRoomResponse = await axiosInstanceForAuth.get("/chatrooms");
             const chatRoomsData = chatRoomResponse.data.data;
             setChatRooms(chatRoomsData);
-            // 아이디만 파싱
-            const ids = chatRoomsData.map((room) => room.id);
-            setChatRoomIds(ids);
+            // // 아이디만 파싱
+            // const ids = chatRoomsData.map((room) => room.id);
+            // setChatRoomIds(ids);
 
             //친구 정보 가져옴
             const friendsResponse = await axiosInstanceForAuth.get("/friends");

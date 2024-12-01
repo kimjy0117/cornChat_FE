@@ -101,13 +101,13 @@ export default function useWebSocketService(){
     };
 
     // 알람 채팅방 구독
-    const subscribeToAlarm = (onMessageReceived) => {
+    const subscribeToAlarm = (userId, onMessageReceived) => {
         if (!stompClient.current){
             return;
         }
 
         // 채팅방 구독
-        const subscription = stompClient.current.subscribe("/topic/notifications", (message) => {
+        const subscription = stompClient.current.subscribe(`/sub/notifications/${userId}`, (message) => {
             const notification = JSON.parse(message.body);
             // console.log(notification);
             onMessageReceived(notification); // 메시지를 콜백 함수로 전달
