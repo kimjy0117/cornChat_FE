@@ -413,7 +413,7 @@ export default function ChatRoom(){
                     senderId: user.userId,
                     chatRoomId: roomId,
                     content: newMessage,
-                    messageType: "text"
+                    messageType: "TEXT"
                 };
                 sendMessage(roomId, message); // 메시지 전송
                 setNewMessage(""); // 입력창 비우기
