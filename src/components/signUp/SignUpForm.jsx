@@ -4,7 +4,7 @@ import { useInput } from "../../hooks/useInput";
 import { isEmpty, isName, isMinMaxLength, isEqualLength, isMaxLength, isPw, isUserId, isEqualValue } from "../../utils/validation";
 import EmailForm from "./EmailForm";
 import { useEffect, useState } from "react";
-import LargeButton from "../buttons/LargeButton";
+import LargeButton from "../buttons/LargeButton2";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/nonAuth/axiosInstance";
 

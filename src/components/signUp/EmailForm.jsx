@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Input from "../input/Input";
 import { useInput } from "../../hooks/useInput";
 import { FormLayout, TitleLayout } from "../../style/formLayout";
-import SmallButton from "../buttons/SmallButton";
+import SmallButton from "../buttons/SmallButton2";
 import { isEmail, isEmpty, isMaxLength, isEqualLength } from "../../utils/validation";
 import axiosInstance from "../../api/nonAuth/axiosInstance";
 
