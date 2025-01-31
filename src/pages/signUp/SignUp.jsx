@@ -1,7 +1,7 @@
 import { BackgroundStyle } from "../../components/BackgroundStyle";
 import Header from "../../components/Header";
 import styled from "styled-components";
-import SignUpArea from "../../components/signUp/signUpArea";
+import SignUpArea from "../../components/signUp/SignUpArea";
 
 const SignUpLayout = styled.div`
     //레이아웃
