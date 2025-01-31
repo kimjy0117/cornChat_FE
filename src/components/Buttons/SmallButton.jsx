@@ -31,7 +31,7 @@ const StyledSmallButton = styled.button`
     }
 `;  
 
-export function SmallButton(props){
+export default function SmallButton(props){
     const {backgroundColor, fontColor, title, margin, onClick, disabled, hoverColor, hoverFontColor} = props;
 
     return <StyledSmallButton 

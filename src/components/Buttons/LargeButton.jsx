@@ -33,7 +33,7 @@ const StyledLargeButton = styled.button`
     }
 `;
 
-export function LargeButton(props){
+export default function LargeButton(props){
     const {backgroundColor, fontColor, title, margin, onClick, disabled, hoverColor, hoverFontColor} = props;
 
     return <StyledLargeButton 
