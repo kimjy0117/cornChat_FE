@@ -19,7 +19,7 @@ export default function useWebSocketService(){
         //     return; 
         // }
 
-        const socket = new SockJS("http://3.36.151.72:8080/ws");
+        const socket = new SockJS("http://localhost:8080/ws");
         const client = Stomp.over(socket);
 
         // Stomp 설정
