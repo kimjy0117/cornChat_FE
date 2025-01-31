@@ -52,7 +52,7 @@ axiosInstanceForAuth.interceptors.response.use(
               return axios(originalRequest);
           } catch (refreshError) {
               // Refresh Token도 만료된 경우 로그아웃 처리
-              window.location.href = "/"; // 시작 페이지로 이동
+              // window.location.href = "/"; // 시작 페이지로 이동
               console.error("리프레시토큰이 만료되었습니다.. 로그아웃됩니다...");
               return Promise.reject(refreshError);
           }
