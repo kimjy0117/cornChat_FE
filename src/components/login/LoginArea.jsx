@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { LargeButton } from "../buttons/LargeButton.jsx";
+import LargeButton from "../buttons/LargeButton";
 import Form from "./Form";
 
 const LoginAreaStyle = styled.div`

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FormLayout, TitleLayout } from "../../style/formLayout";
 import FindPwInput from "../input/Input";
-import { LargeButton } from "../buttons/LargeButton";
+import LargeButton from "../buttons/LargeButton";
 import { useInput } from "../../hooks/useInput";
 import { isEmpty, isPw, isEqualValue } from "../../utils/validation";
 import { useState } from "react";
