@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import LargeButton from "../buttons/LargeButton";
+import LargeButton from "../buttons/LargeButton2";
 import { useNavigate } from "react-router-dom";
 
 const FindPwAreaStyle = styled.div`

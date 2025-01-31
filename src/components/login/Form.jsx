@@ -1,6 +1,6 @@
 import Input from "../input/LoginInput";
 import { useInput } from "../../hooks/useInput";
-import LargeButton from "../buttons/LargeButton";
+import LargeButton from "../buttons/LargeButton2";
 import { isMinLength, isMaxLength, isEmpty, isEmail} from "../../utils/validation"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
