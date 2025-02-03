@@ -19,13 +19,13 @@ export default function Form(){
         value: emailValue,
         hasError: emailHasError, 
         inputHandler: emailInputHandler,
-     } = useInput('', (value) => isEmpty(value) || isEmail(value));
+     } = useInput('tester1@test.com', (value) => isEmpty(value) || isEmail(value));
 
     const {
         value: passwordValue,
         hasError: passwordHasError, 
         inputHandler: passwordInputHandler,
-     } = useInput('', (value) => isEmpty(value) || (isMinLength(value, 8) && isMaxLength(value, 15)));
+     } = useInput('test1234', (value) => isEmpty(value) || (isMinLength(value, 8) && isMaxLength(value, 15)));
 
     //로그인 요청 api호출
     const loginSubmit = async () => {
