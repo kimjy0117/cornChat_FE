@@ -6,7 +6,7 @@
 ## 콘챗 web project
 >**개발 기간** : 20240907 ~
 
->**배포된 주소** : http://www.cornchat.site
+>**배포된 주소** : https://cornchat.vercel.app
 
 <br> <br>
 
